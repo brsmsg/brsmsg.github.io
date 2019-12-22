@@ -3,21 +3,21 @@
   
   <url>
     <loc>http://brsmsg.github.io/</loc>
-    <lastmod>2019-12-11T17:55:14+08:00</lastmod>
+    <lastmod>2019-12-22T11:59:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>http://brsmsg.github.io/post/</loc>
-    <lastmod>2019-12-11T17:55:14+08:00</lastmod>
+    <lastmod>2019-12-22T11:59:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>http://brsmsg.github.io/post/test/</loc>
-    <lastmod>2019-12-11T17:55:14+08:00</lastmod>
+    <loc>http://brsmsg.github.io/post/producer-consumer/</loc>
+    <lastmod>2019-12-22T11:59:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

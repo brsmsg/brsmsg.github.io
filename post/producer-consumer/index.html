@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Producer Consumer - brsmsg&#39;s blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="olOwOlo" /><meta name="description" content="Producer-Consumer Problem 复习操作系统，看到了生产者消费者问题。producer-consumer模型就是生产者生产资料，消费者消费资料，两者通过一个有限缓冲区通" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.60.1 with theme even" />
+
+
+<link rel="canonical" href="http://brsmsg.github.io/post/producer-consumer/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Producer Consumer" />
+<meta property="og:description" content="Producer-Consumer Problem 复习操作系统，看到了生产者消费者问题。producer-consumer模型就是生产者生产资料，消费者消费资料，两者通过一个有限缓冲区通" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://brsmsg.github.io/post/producer-consumer/" />
+<meta property="article:published_time" content="2019-12-22T11:59:23+08:00" />
+<meta property="article:modified_time" content="2019-12-22T11:59:23+08:00" />
+<meta itemprop="name" content="Producer Consumer">
+<meta itemprop="description" content="Producer-Consumer Problem 复习操作系统，看到了生产者消费者问题。producer-consumer模型就是生产者生产资料，消费者消费资料，两者通过一个有限缓冲区通">
+<meta itemprop="datePublished" content="2019-12-22T11:59:23&#43;08:00" />
+<meta itemprop="dateModified" content="2019-12-22T11:59:23&#43;08:00" />
+<meta itemprop="wordCount" content="1139">
+
+
+
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Producer Consumer"/>
+<meta name="twitter:description" content="Producer-Consumer Problem 复习操作系统，看到了生产者消费者问题。producer-consumer模型就是生产者生产资料，消费者消费资料，两者通过一个有限缓冲区通"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">brsmsg</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">brsmsg</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Producer Consumer</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-12-22 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#synchronize-and-mutex">Synchronize and Mutex</a></li>
+        <li><a href="#linux">Linux中的相关方法</a></li>
+        <li><a href="#heading">简单实现</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h1 id="producerconsumer-problem">Producer-Consumer Problem</h1>
+<p>复习操作系统，看到了生产者消费者问题。producer-consumer模型就是生产者生产资料，消费者消费资料，两者通过一个有限缓冲区通信。内存缓冲区满的时候生产者必须等待，内存缓冲区空的时候，消费者必须等待，两个进程/线程对缓冲区操作的时候保证只有一个对其操作，所以要设计互斥锁的策略（信号量semaphore）。</p>
+<hr>
+<h3 id="synchronize-and-mutex">Synchronize and Mutex</h3>
+<ul>
+<li>互斥：进程间因为相互竞争使用独占型资源产生的制约关系</li>
+<li>同步：完成统一任务的伙伴进程间，需要默写位置上协调工作而相互等待，相互交换信息产生的制约关系。</li>
+</ul>
+<h3 id="linux">Linux中的相关方法</h3>
+<ul>
+<li>Pthread
+<ul>
+<li>pthread_create(pthread_t *tidp,const pthread_attr_t <em>attr, (void</em>)(<em>start_rtn)(void</em>),void *arg)如果创建成功，返回 0，创建失败返 回-1。第一个参数指向线程标识符指针，第二个参数设置线程属性，第三个参数 就是要运行的线程函数，第四个就表示运行函数的参数。</li>
+<li>pthread_join(pthread_t thread, void **retval):使一个线程等待另一个线程结束，如果没有 pthread_join，主线程会很快结束，从而整个进程结束。使用pthread_join 后，主线程会一直等待到直到等待的线程结束自己才结束，使创建的线程有机会执行。</li>
+</ul>
+</li>
+<li>Mutex
+<ul>
+<li>Pthread_mutex_t:互斥锁信号量的特定数据类型</li>
+<li>Pthread_mutex_init():对锁动态初始化，也可以使用宏来静态初始化。使用互斥量前必须要初始化。</li>
+<li>Pthread_mutex_lock(pthread_mutex_t *mutex)通过互斥信息量对线程上锁，即进行p(wait)操作，对信号量-1。</li>
+<li>Pthread_mutex_unlock(pthread_mutex_t *mutex)互斥量对线程解锁，即进行v(post)操作，对信号量+1。</li>
+</ul>
+</li>
+<li>Semaphore
+<ul>
+<li>sem_t：信号量的特定数据类型</li>
+<li>sem_init()：对信号量初始化</li>
+<li>sem_wait(sem_t * sem)：对信号量执行p操作，信号量-1</li>
+<li>sem_post(sem_t *sem)：对信号量执行v操作，信号量+1</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="heading">简单实现</h3>
+<p>设置两个同步信号量sem_full和sem_empty来表示被占用的/空缓冲区数量以监管buffer，同时驱动p/c操作，实验中分别设置两个consumer和两个producer，轮流对缓冲区添加/取出product</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span><span class="lnt">87
+</span><span class="lnt">88
+</span><span class="lnt">89
+</span><span class="lnt">90
+</span><span class="lnt">91
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#</span><span class="cp">include</span><span class="cpf">&lt;pthread.h&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="cp">#</span><span class="cp">include</span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="cp">#</span><span class="cp">include</span><span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="cp">#</span><span class="cp">include</span><span class="cpf">&lt;semaphore.h&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="cp">#</span><span class="cp">include</span><span class="cpf">&lt;pthread.h&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="cp">#</span><span class="cp">include</span><span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="n">sem_t</span> <span class="n">empty_sem</span><span class="p">;</span>        <span class="c1">//syn semaphore, stop consuming if empty
+</span><span class="c1"></span><span class="n">sem_t</span> <span class="n">full_sem</span><span class="p">;</span>         <span class="c1">//syc semaphore, stop producing if full
+</span><span class="c1"></span><span class="n">pthread_mutex_t</span> <span class="n">mutex</span><span class="p">;</span>  <span class="c1">//mutex smaphore
+</span><span class="c1"></span><span class="kt">int</span> <span class="n">producer_id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">consumer_id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">}</span><span class="p">;</span>    <span class="c1">//buffer zone
+</span><span class="c1"></span><span class="kt">int</span> <span class="n">in</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>     <span class="c1">//index of producer
+</span><span class="c1"></span><span class="kt">int</span> <span class="n">out</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>    <span class="c1">//index of consumer
+</span><span class="c1"></span>
+<span class="kt">void</span> <span class="nf">printBuffer</span><span class="p">(</span><span class="p">)</span><span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="p">)</span><span class="p">{</span>
+                <span class="n">printf</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">%d  </span><span class="s">&#34;</span><span class="p">,</span> <span class="n">buffer</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="p">)</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">printf</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">)</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="o">*</span><span class="nf">producer</span><span class="p">(</span><span class="p">)</span><span class="p">{</span>
+        <span class="kt">int</span> <span class="n">id</span> <span class="o">=</span> <span class="o">+</span><span class="o">+</span><span class="n">producer_id</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="p">{</span>
+                <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="p">;</span>       <span class="c1">//help to observe
+</span><span class="c1"></span>                <span class="n">sem_wait</span><span class="p">(</span><span class="o">&amp;</span><span class="n">empty_sem</span><span class="p">)</span><span class="p">;</span>
+                <span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mutex</span><span class="p">)</span><span class="p">;</span>
+                <span class="c1">//add item to buffer
+</span><span class="c1"></span>                <span class="n">in</span> <span class="o">=</span> <span class="n">in</span> <span class="o">%</span> <span class="mi">5</span><span class="p">;</span>
+                <span class="n">printf</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">producer %d in index %d</span><span class="se">\t</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="n">in</span><span class="p">)</span><span class="p">;</span>
+                <span class="n">buffer</span><span class="p">[</span><span class="n">in</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="n">printBuffer</span><span class="p">(</span><span class="p">)</span><span class="p">;</span>
+                <span class="n">in</span> <span class="o">+</span><span class="o">+</span><span class="p">;</span>
+
+                <span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mutex</span><span class="p">)</span><span class="p">;</span>
+                <span class="n">sem_post</span><span class="p">(</span><span class="o">&amp;</span><span class="n">full_sem</span><span class="p">)</span><span class="p">;</span>    <span class="c1">//cause consumer action
+</span><span class="c1"></span>        <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="o">*</span><span class="nf">consumer</span><span class="p">(</span><span class="p">)</span><span class="p">{</span>
+        <span class="kt">int</span> <span class="n">id</span> <span class="o">=</span> <span class="o">+</span><span class="o">+</span><span class="n">consumer_id</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="p">{</span>
+                <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="p">;</span>       <span class="c1">//help to observe
+</span><span class="c1"></span>                <span class="n">sem_wait</span><span class="p">(</span><span class="o">&amp;</span><span class="n">full_sem</span><span class="p">)</span><span class="p">;</span>
+                <span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mutex</span><span class="p">)</span><span class="p">;</span>
+                <span class="c1">//take item away from buffer
+</span><span class="c1"></span>                <span class="n">out</span> <span class="o">=</span> <span class="n">out</span> <span class="o">%</span> <span class="mi">5</span><span class="p">;</span>
+                <span class="n">printf</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">consumer %d in index %d</span><span class="se">\t</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span><span class="p">;</span>
+                <span class="n">buffer</span><span class="p">[</span><span class="n">out</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="n">printBuffer</span><span class="p">(</span><span class="p">)</span><span class="p">;</span>
+                <span class="n">out</span> <span class="o">+</span><span class="o">+</span><span class="p">;</span>
+
+                <span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mutex</span><span class="p">)</span><span class="p">;</span>
+                <span class="n">sem_post</span><span class="p">(</span><span class="o">&amp;</span><span class="n">empty_sem</span><span class="p">)</span><span class="p">;</span>   <span class="c1">//cause producer action
+</span><span class="c1"></span>        <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="p">)</span><span class="p">{</span>
+        <span class="n">pthread_t</span> <span class="n">id1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="p">;</span>       <span class="c1">//2 producers
+</span><span class="c1"></span>        <span class="n">pthread_t</span> <span class="n">id2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="p">;</span>       <span class="c1">//2 consumers
+</span><span class="c1"></span>        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">ret</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="p">;</span>
+        <span class="c1">//initialize syn semaphore
+</span><span class="c1"></span>        <span class="kt">int</span> <span class="n">ini1</span> <span class="o">=</span> <span class="n">sem_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">empty_sem</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">ini2</span> <span class="o">=</span> <span class="n">sem_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">full_sem</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">ini1</span> <span class="o">&amp;</span><span class="o">&amp;</span> <span class="n">ini2</span> <span class="o">!</span><span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="p">{</span>
+                <span class="n">printf</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">sem initialization faied!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">)</span><span class="p">;</span>
+                <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//create threads of producers and consumers
+</span><span class="c1"></span>        <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">;</span> <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="p">)</span><span class="p">{</span>
+                <span class="n">ret</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">id1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">producer</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">ret</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!</span><span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="p">{</span>
+                        <span class="n">printf</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">producer %d creation failed </span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span><span class="p">;</span>
+                        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="p">;</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+		 <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">;</span> <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="p">)</span><span class="p">{</span>
+                <span class="n">ret</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">id2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">consumer</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">ret</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!</span><span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="p">{</span>
+                        <span class="n">printf</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">consumer %d creation failed </span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span><span class="p">;</span>
+                        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="p">;</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">;</span> <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="p">)</span><span class="p">{</span>
+                <span class="n">pthread_join</span><span class="p">(</span><span class="n">id1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span><span class="p">;</span>
+                <span class="n">pthread_join</span><span class="p">(</span><span class="n">id2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">olOwOlo</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2019-12-22
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost:1313" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="http://localhost:1313" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="http://localhost:1313" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="http://localhost:1313" class="iconfont icon-google" title="google"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="http://localhost:1313" class="iconfont icon-douban" title="douban"></a>
+      <a href="http://localhost:1313" class="iconfont icon-pocket" title="pocket"></a>
+      <a href="http://localhost:1313" class="iconfont icon-tumblr" title="tumblr"></a>
+      <a href="http://localhost:1313" class="iconfont icon-instagram" title="instagram"></a>
+      <a href="http://localhost:1313" class="iconfont icon-gitlab" title="gitlab"></a>
+      <a href="http://localhost:1313" class="iconfont icon-bilibili" title="bilibili"></a>
+  <a href="http://brsmsg.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">olOwOlo</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
