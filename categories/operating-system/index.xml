@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Operating System on brsmsg&#39;s blog</title>
+    <link>http://brsmsg.github.io/categories/operating-system/</link>
+    <description>Recent content in Operating System on brsmsg&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 22 Dec 2019 11:59:23 +0800</lastBuildDate>
+    
+	<atom:link href="http://brsmsg.github.io/categories/operating-system/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Producer Consumer</title>
+      <link>http://brsmsg.github.io/post/producer-consumer/</link>
+      <pubDate>Sun, 22 Dec 2019 11:59:23 +0800</pubDate>
+      
+      <guid>http://brsmsg.github.io/post/producer-consumer/</guid>
+      <description>Producer-Consumer Problem 复习操作系统，看到了生产者消费者问题。producer-consumer模型就是生产者生产资料，消费者消费资料，两者通过一个有限缓冲区通</description>
+    </item>
+    
+  </channel>
+</rss>

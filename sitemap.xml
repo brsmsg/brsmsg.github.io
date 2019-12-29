@@ -9,6 +9,20 @@
   </url>
   
   <url>
+    <loc>http://brsmsg.github.io/categories/</loc>
+    <lastmod>2019-12-22T11:59:23+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://brsmsg.github.io/categories/operating-system/</loc>
+    <lastmod>2019-12-22T11:59:23+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>http://brsmsg.github.io/post/</loc>
     <lastmod>2019-12-22T11:59:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -18,12 +32,6 @@
   <url>
     <loc>http://brsmsg.github.io/post/producer-consumer/</loc>
     <lastmod>2019-12-22T11:59:23+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://brsmsg.github.io/categories/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
