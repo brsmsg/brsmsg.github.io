@@ -6,10 +6,19 @@
     <description>Recent content in Posts on brsmsg&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 22 Dec 2019 11:59:23 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 22 Feb 2020 23:54:37 +0800</lastBuildDate>
     
 	<atom:link href="http://brsmsg.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>How to Upload blogs</title>
+      <link>http://brsmsg.github.io/post/how_tow-to-upload/</link>
+      <pubDate>Sat, 22 Feb 2020 23:54:37 +0800</pubDate>
+      
+      <guid>http://brsmsg.github.io/post/how_tow-to-upload/</guid>
+      <description>使用hugo上传博客 一段时间没有写博客，hugo上传博客的方法有点生疏。。记录一下 cd 到hugo博客根目录下 hugo new post/xxx.md 创建新的博客。 然后hugo就</description>
+    </item>
     
     <item>
       <title>Producer Consumer</title>
